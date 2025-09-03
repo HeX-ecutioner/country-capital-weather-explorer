@@ -1,0 +1,8 @@
+# This is when you create a local key without using Netlify
+config.js
+.DS_Store
+node_modules/
+dist/
+.env
+# Local Netlify folder
+.netlify

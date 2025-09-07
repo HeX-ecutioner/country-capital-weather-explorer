@@ -31,17 +31,27 @@ async function fetchCountryByName(name) {
     return data[0]; // REST Countries returns array; take first plausible match
 }
 
-async function fetchWeatherForCity(cityName) { // Calls the Netlify serverless function instead of OpenWeather API directly
-    const url = `/.netlify/functions/getWeather?city=${encodeURIComponent(cityName)}`;
-    const res = await fetch(url);
-
-    if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(`Weather fetch failed: ${res.status} ${res.statusText} ${txt}`);
+async function fetchWeatherForCity(cityName) { // If Netlify functions are available, use them
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        const key = getOpenWeatherKey(); // Local dev: use config.js
+        if (!key) throw new Error('OpenWeather API key not found. Add config.js in local dev.');
+        const url = `${openWeatherBase}?q=${encodeURIComponent(cityName)}&units=metric&appid=${key}`;
+        const res = await fetch(url);
+        if (!res.ok) {
+            const txt = await res.text();
+            throw new Error(`Weather fetch failed: ${res.status} ${res.statusText} ${txt}`);
+        }
+        return await res.json();
+    } else {
+        // Production (Netlify): use serverless function
+        const url = `/.netlify/functions/getWeather?city=${encodeURIComponent(cityName)}`;
+        const res = await fetch(url);
+        if (!res.ok) {
+            const txt = await res.text();
+            throw new Error(`Weather fetch failed: ${res.status} ${res.statusText} ${txt}`);
+        }
+        return await res.json();
     }
-
-    const data = await res.json();
-    return data;
 }
 
 function showLoading(show = true, text = 'Loading…') {
@@ -229,8 +239,6 @@ function init() {
             localStorage.setItem('theme', 'light');
         }
     });
-    // example: show India on load (optional). Comment out if undesired.
-    // handleSearch('India');
 }
 
 document.addEventListener('DOMContentLoaded', init);

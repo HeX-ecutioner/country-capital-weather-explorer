@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
     <title>Country & Capital Weather Explorer</title>
+
     <link rel="icon" href="./assets/favicon.png">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -14,9 +16,6 @@
         <div class="central-card">
             <header>
                 <h1 class="title">Country & Capital Weather Explorer</h1>
-                <label class="theme-toggle">
-                    <input id="darkToggle" type="checkbox"><span>Dark</span>
-                </label>
             </header>
 
             <section class="search-area">
@@ -33,9 +32,16 @@
                 <div id="cardContainer"></div>
             </section>
 
-            <footer class="footer">
-                <small>Uses REST Countries & OpenWeatherMap</small>
-            </footer>
+            <div class="bottom-row">
+                <div id="darkModeSwitch" title="Switch to Dark Mode">
+                    <div class="slider">
+                        <span class="icon">🌙</span>
+                    </div>
+                </div>
+                <footer class="footer">
+                    <small>Uses REST Countries & OpenWeatherMap</small>
+                </footer>
+            </div>
         </div>
     </main>
 

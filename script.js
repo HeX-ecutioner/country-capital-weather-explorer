@@ -173,27 +173,44 @@ async function handleGeolocation() {
     );
 }
 
-function applyDarkFromPref() {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+const darkModeSwitch = document.getElementById('darkModeSwitch'),
+    sliderIcon = darkModeSwitch.querySelector('.icon');
+
+function setDarkMode(enabled, remember = true) {
+    if (enabled) {
         document.body.classList.add('dark');
+        sliderIcon.textContent = "☀️";
+        darkModeSwitch.title = "Switch to Light Mode";
+        if (remember) localStorage.setItem('darkMode', 'enabled');
+    } else {
+        document.body.classList.remove('dark');
+        sliderIcon.textContent = "🌙";
+        darkModeSwitch.title = "Switch to Dark Mode";
+        if (remember) localStorage.setItem('darkMode', 'disabled');
     }
-    if (saved === 'dark') dom.darkToggle.checked = true;
 }
 
-function init() {
-    applyDarkFromPref();
+const savedPreference = localStorage.getItem('darkMode');
+if (savedPreference) setDarkMode(savedPreference === 'enabled', false);
+else {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setDarkMode(prefersDark, false);
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (!localStorage.getItem('darkMode')) setDarkMode(e.matches, false);
+});
+darkModeSwitch.addEventListener('click', () => {
+    const isDark = !document.body.classList.contains('dark');
+    setDarkMode(isDark);
+});
 
+
+function init() {
     dom.searchBtn.addEventListener('click', () => handleSearch(dom.countryInput.value));
     dom.countryInput.addEventListener('keyup', e => {
         if (e.key === 'Enter') handleSearch(dom.countryInput.value);
     });
     dom.geoBtn.addEventListener('click', handleGeolocation);
-
-    dom.darkToggle.addEventListener('change', e => {
-        document.body.classList.toggle('dark', e.target.checked);
-        localStorage.setItem('theme', e.target.checked ? 'dark' : 'light');
-    });
 }
 
 document.addEventListener('DOMContentLoaded', init);

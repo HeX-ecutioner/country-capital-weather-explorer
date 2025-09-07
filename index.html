@@ -2,48 +2,44 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Country & Capital Weather Explorer</title>
-
-    <link rel="icon" href="./assets/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="./assets/favicon.png">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <header class="topbar">
-        <h1>Country → Capital Weather</h1>
-        <div class="controls">
-            <label class="theme-toggle">
-                <input id="darkToggle" type="checkbox" />
-                <span>Dark</span>
-            </label>
+    <main class="main-container">
+        <div class="central-card">
+            <header>
+                <h1 class="title">Country & Capital Weather Explorer</h1>
+                <label class="theme-toggle">
+                    <input id="darkToggle" type="checkbox"><span>Dark</span>
+                </label>
+            </header>
+
+            <section class="search-area">
+                <div class="row">
+                    <input id="countryInput" type="text" placeholder="Enter country name (e.g. France)">
+                    <button id="searchBtn">Search</button>
+                    <button id="geoBtn" title="Find my country via Geolocation">Use My Location</button>
+                </div>
+                <div class="hint">Tip: Try "India", "Japan" or "US"</div>
+            </section>
+
+            <section class="result-area" aria-live="polite">
+                <div id="loading" class="loading hidden">Loading…</div>
+                <div id="cardContainer"></div>
+            </section>
+
+            <footer class="footer">
+                <small>Uses REST Countries & OpenWeatherMap</small>
+            </footer>
         </div>
-    </header>
-
-    <main class="container">
-        <section class="search-area card">
-            <div class="row">
-                <input id="countryInput" type="text" placeholder="Enter country name (e.g. France)" />
-                <button id="searchBtn">Search</button>
-                <button id="geoBtn" title="Find my country via Geolocation">Use My Location</button>
-            </div>
-            <div class="hint">Tip: Try "Japan", "Brazil", or "India"</div>
-        </section>
-
-        <section id="result" class="card result-area" aria-live="polite">
-            <!-- Country + Weather Card inserted here -->
-            <div id="loading" class="loading hidden">Loading…</div>
-            <div id="cardContainer"></div>
-        </section>
     </main>
 
-    <footer class="footer">
-        <small>Uses REST Countries & OpenWeatherMap</small>
-    </footer>
-
-    <script src="config.js"></script> <!--Only for local testing-->
+    <script src="config.js"></script>
     <script src="script.js" defer></script>
 </body>
 

@@ -1,92 +1,126 @@
 :root {
-    --bg: #f4f6f8;
-    --card: #ffffff;
+    --bg: powderblue;
+    --card: #fff;
     --text: #0f1724;
-    --muted: #6b7280;
-    --accent: #0ea5e9;
-    --shadow: 0 6px 18px rgba(15, 23, 36, 0.08);
+    --muted: #444;
+    --accent: #0077b6;
+    --shadow: 0 6px 18px rgba(15, 23, 36, .08);
 }
 
 * {
-    box-sizing: border-box
-}
-
-html,
-body {
-    height: 100%
+    box-sizing: border-box;
 }
 
 body {
+    height: 100%;
     margin: 0;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    font-family: Inter, system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    line-height: 1.45;
 }
 
-.topbar {
+body.dark {
+    --bg: #374151;
+    --card: #0f1724;
+    --text: #f9fafb;
+    --muted: #94a3b8;
+    --accent: #60a5fa;
+    --shadow: 0 6px 18px rgba(2, 6, 23, .6);
+}
+body.dark #geoBtn {
+    background: #4f46e5;
+    color: #fff !important;
+}
+body.dark button {
+    background: #0077b6;
+    color: #fff;
+}
+
+.main-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    min-height: 100vh;
     padding: 1rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
 }
 
-.topbar h1 {
-    margin: 0;
-    font-size: 1.125rem
-}
-
-.container {
-    max-width: 900px;
-    margin: 1.25rem auto;
-    padding: 0 1rem;
-}
-
-.card {
+.central-card {
     background: var(--card);
-    border-radius: 12px;
-    padding: 1rem;
+    border-radius: 20px;
+    padding: 2rem;
     box-shadow: var(--shadow);
-    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+header {
+    text-align: center;
+}
+
+.title {
+    font-size: 1.7rem;
+    margin: .5rem 0;
+}
+
+.theme-toggle {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    justify-content: center;
+    font-size: .95rem;
 }
 
 .search-area .row {
     display: flex;
-    gap: 0.5rem;
-    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    flex-wrap: wrap;
 }
 
 input[type="text"] {
-    flex: 1;
-    padding: 0.6rem 0.75rem;
-    font-size: 1rem;
+    width: 300px;
+    max-width: 100%;
+    padding: .6rem .75rem;
     border-radius: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, .08);
+    transition: .3s;
+}
+
+input[type="text"]:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 8px rgba(14, 165, 233, .4);
 }
 
 button {
-    padding: 0.6rem 0.85rem;
+    padding: .55rem .9rem;
     border-radius: 8px;
-    border: 0;
-    background: var(--accent);
-    color: white;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-button[title] {
+    transition: .25s;
+    font-size: .95rem;
+    border: none;
     background: #e2e8f0;
-    color: var(--text)
+    color: #0f1724;
+}
+button[title] {
+    border: none;
+    background: #e2e8f0;
+    color: var(--text);
+}
+button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+button:active {
+    transform: scale(0.96);
+    filter: brightness(0.9);
 }
 
 .hint {
-    margin-top: 0.5rem;
+    margin: .5rem 0 0 1.3rem;
     color: var(--muted);
-    font-size: 0.9rem
+    font-size: .9rem;
 }
 
 .loading {
@@ -97,97 +131,86 @@ button[title] {
 }
 
 .hidden {
-    display: none
+    display: none;
 }
 
-/* Result card */
+.result-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .result-card {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 1rem;
-    align-items: center;
-}
-
-.flag {
+    display: flex;
+    gap: 2rem;
     width: 100%;
-    max-width: 140px;
-    border-radius: 8px;
+    padding: 1.5rem;
+    border-radius: 16px;
+    background: var(--bg);
+    box-shadow: var(--shadow);
+}
+
+.left-half,
+.right-half {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.left-half .flag {
     overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
 }
-
-.info h2 {
-    margin: 0 0 0.25rem 0;
-    font-size: 1.25rem
+.left-half .flag img {
+    width: 100%;
+    height: 100%;
 }
-
-.meta {
+.left-half .temp {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.left-half .weather {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.left-half .weather-desc {
+    font-size: 1.7rem;
+    margin: .25rem 0;
     color: var(--muted);
-    margin-bottom: 0.6rem
 }
 
-.weather {
+.right-half h2 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+.right-half .meta {
     display: flex;
-    gap: 1rem;
-    align-items: center;
+    flex-direction: column;
+    gap: .3rem;
+    color: var(--muted);
 }
-
-.weather .temp {
-    font-size: 1.75rem;
-    font-weight: 700
+.right-half .meta div span.label {
+    font-weight: 700;
+    margin-right: .4rem;
+    font-size: 1.3rem;
 }
-
-.weather-desc {
-    font-size: 0.95rem;
-    color: var(--muted)
-}
-
-.icon {
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.04)
-}
-
-/* This makes it more responsive */
-@media (max-width:700px) {
-    .result-card {
-        grid-template-columns: 1fr;
-        text-align: center
-    }
-
-    .flag {
-        max-width: 220px;
-        margin: 0 auto
-    }
-
-    .weather {
-        justify-content: center
-    }
-}
-
-/* Dark mode */
-body.dark {
-    --bg: #0b1220;
-    --card: #0f1724;
-    --text: #ecf0f6;
-    --muted: #94a3b8;
-    --accent: #60a5fa;
-    --shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
-}
-
-.theme-toggle {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    font-size: 0.95rem;
+.right-half .meta div span.value {
+    font-weight: 500;
+    font-size: 1.25rem;
 }
 
 .footer {
-    text-align: center;
-    padding: 1rem;
-    color: var(--muted)
+    text-align: right;
+    color: var(--muted);
+}
+
+@media(max-width:700px) {
+    .result-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .weather {
+        justify-content: center;
+    }
 }

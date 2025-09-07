@@ -15,7 +15,13 @@ const getOpenWeatherKey = () => window.__CONFIG__?.OPENWEATHER_API_KEY || null;
 async function fetchCountryByName(name) {
     const res = await fetch(`${restCountriesBase}${encodeURIComponent(name)}?fullText=false`);
     if (!res.ok) throw new Error(`Country not found (status ${res.status})`);
-    return (await res.json())[0];
+
+    const data = await res.json();
+
+    // Try to match exact common name (case-insensitive)
+    const exactMatch = data.find(c => c.name.common.toLowerCase() === name.trim().toLowerCase());
+
+    return exactMatch || data[0]; // fallback to first match
 }
 
 async function fetchWeatherForCity(city) {

@@ -116,13 +116,16 @@ function renderCard(country, weather) {
     const metaDiv = document.createElement('div');
     metaDiv.className = 'meta';
 
+    const officialDiv = document.createElement('div');
+    officialDiv.innerHTML = `<span class="label">Official Name:</span><span class="value">${country.name.official}</span>`;
+
     const capitalDiv = document.createElement('div');
     capitalDiv.innerHTML = `<span class="label">Capital:</span><span class="value">${capital}</span>`;
 
     const popDiv = document.createElement('div');
     popDiv.innerHTML = `<span class="label">Population:</span><span class="value">${population}</span>`;
 
-    metaDiv.append(capitalDiv, popDiv);
+    metaDiv.append(officialDiv, capitalDiv, popDiv);
     right.appendChild(metaDiv);
 
     card.append(left, right);

@@ -2,7 +2,7 @@
 
 A single-page app using **HTML + CSS + vanilla JS** that:
 - Lets users search for a country (REST Countries API)
-- Shows country details (flag, name, capital, population)
+- Shows country details (flag, name, official name, capital, population)
 - Fetches current weather for the capital (via **Netlify serverless function + OpenWeatherMap**)
 - Includes responsive design, loading states, geolocation, and dark mode
 

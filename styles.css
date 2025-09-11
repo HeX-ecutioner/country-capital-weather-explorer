@@ -57,6 +57,43 @@ body.dark #darkModeSwitch .slider {
     color: #fff;
 }
 
+#tempUnitSwitch {
+    width: 60px;
+    height: 30px;
+    background: #ccc;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 3px;
+    transition: background 0.3s;
+    box-sizing: border-box;
+}
+
+#tempUnitSwitch .slider {
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s, background 0.3s;
+    font-size: 14px;
+    line-height: 1;
+    user-select: none;
+}
+
+body.dark #tempUnitSwitch {
+    background: #8884d8;
+}
+
+body.dark #tempUnitSwitch .slider {
+    background: #2c2c54;
+    color: #fff;
+}
+
 .footer {
     text-align: right;
     color: var(--muted);

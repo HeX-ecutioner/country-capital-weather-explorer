@@ -31,8 +31,8 @@ async function fetchWeatherForCity(city) {
     }
 
     const url = key
-        ? `${openWeatherBase}?q=${encodeURIComponent(city)}&units=metric&appid=${key}`
-        : `/.netlify/functions/getWeather?city=${encodeURIComponent(city)}`;
+        ? `${openWeatherBase}?q=${encodeURIComponent(city)}&units=${tempUnit}&appid=${key}`
+        : `/.netlify/functions/getWeather?city=${encodeURIComponent(city)}&units=${tempUnit}`;
 
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Weather fetch failed: ${res.status} ${res.statusText}`);
@@ -96,7 +96,8 @@ function renderCard(country, weather) {
 
         const tempDiv = document.createElement('div');
         tempDiv.className = 'temp';
-        tempDiv.textContent = `🌡️ ${temp}°C`;
+        const unitSymbol = tempUnit === 'metric' ? '°C' : '°F';
+        tempDiv.textContent = `🌡️ ${temp}${unitSymbol}`;
 
         weatherDiv.append(icon, descDiv, tempDiv);
     } else {
@@ -213,6 +214,19 @@ darkModeSwitch.addEventListener('click', () => {
     setDarkMode(isDark);
 });
 
+let tempUnit = localStorage.getItem('tempUnit') || 'metric'; // 'metric' = °C, 'imperial' = °F
+const tempUnitSwitch = document.getElementById('tempUnitSwitch');
+const tempSliderIcon = tempUnitSwitch.querySelector('.icon');
+
+function setTempUnit(unit, remember = true) {
+    tempUnit = unit;
+    tempSliderIcon.textContent = unit === 'metric' ? '°C' : '°F';
+    tempUnitSwitch.title = unit === 'metric' ? 'Switch to Fahrenheit' : 'Switch to Celsius';
+    if (remember) localStorage.setItem('tempUnit', unit);
+
+    const countryName = dom.countryInput.value.trim(); // If a country is already displayed, re-fetch weather
+    if (countryName) handleSearch(countryName);
+}
 
 function init() {
     dom.searchBtn.addEventListener('click', () => handleSearch(dom.countryInput.value));
@@ -221,5 +235,11 @@ function init() {
     });
     dom.geoBtn.addEventListener('click', handleGeolocation);
 }
+
+setTempUnit(tempUnit, false);
+tempUnitSwitch.addEventListener('click', () => {
+    const newUnit = tempUnit === 'metric' ? 'imperial' : 'metric';
+    setTempUnit(newUnit);
+});
 
 document.addEventListener('DOMContentLoaded', init);

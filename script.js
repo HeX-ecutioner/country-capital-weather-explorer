@@ -1,5 +1,4 @@
-const restCountriesBase = 'https://restcountries.com/v3.1/name/';
-const openWeatherBase = 'https://api.openweathermap.org/data/2.5/weather';
+let lastCountry = null, lastCapital = null;
 
 const dom = {
     countryInput: document.getElementById('countryInput'),
@@ -13,7 +12,7 @@ const dom = {
 const getOpenWeatherKey = () => window.__CONFIG__?.OPENWEATHER_API_KEY || null;
 
 async function fetchCountryByName(name) {
-    const res = await fetch(`${restCountriesBase}${encodeURIComponent(name)}?fullText=false`);
+    const res = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(name)}?fullText=false`);
     if (!res.ok) throw new Error(`Country not found (status ${res.status})`);
 
     const data = await res.json();
@@ -31,7 +30,7 @@ async function fetchWeatherForCity(city) {
     }
 
     const url = key
-        ? `${openWeatherBase}?q=${encodeURIComponent(city)}&units=${tempUnit}&appid=${key}`
+        ? `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=${tempUnit}&appid=${key}`
         : `/.netlify/functions/getWeather?city=${encodeURIComponent(city)}&units=${tempUnit}`;
 
     const res = await fetch(url);
@@ -141,6 +140,9 @@ async function handleSearch(countryName) {
     try {
         const country = await fetchCountryByName(countryName.trim());
         const capital = country.capital?.[0] || null;
+        lastCountry = country;
+        lastCapital = capital;
+
         const weather = capital ? await fetchWeatherForCity(capital) : null;
         renderCard(country, weather);
     } catch (err) {
@@ -151,6 +153,7 @@ async function handleSearch(countryName) {
         showLoading(false);
     }
 }
+
 
 async function handleGeolocation() {
     if (!navigator.geolocation) return alert('Geolocation not supported.');
@@ -224,8 +227,11 @@ function setTempUnit(unit, remember = true) {
     tempUnitSwitch.title = unit === 'metric' ? 'Switch to Fahrenheit' : 'Switch to Celsius';
     if (remember) localStorage.setItem('tempUnit', unit);
 
-    const countryName = dom.countryInput.value.trim(); // If a country is already displayed, re-fetch weather
-    if (countryName) handleSearch(countryName);
+    if (lastCapital && lastCountry) {
+        fetchWeatherForCity(lastCapital).then(weather => {
+            renderCard(lastCountry, weather);
+        });
+    }
 }
 
 function init() {

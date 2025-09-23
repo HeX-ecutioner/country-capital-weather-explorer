@@ -9,8 +9,8 @@
         "deploy": "netlify deploy"
     },
     "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "author": "Sagnik Maitra",
+    "license": "MIT",
     "devDependencies": {
         "netlify-cli": "^23.5.0"
     },

@@ -27,7 +27,7 @@ A single-page app using **HTML + CSS + vanilla JS** that:
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+   git clone https://github.com/HeX-ecutioner/country-capital-weather-explorer.git
    cd YOUR_REPO
    ```
 

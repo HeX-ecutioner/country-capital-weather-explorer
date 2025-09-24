@@ -1,9 +1,6 @@
-# This is when you create a local key without using Netlify
+# Create this when you need to test locally without using Netlify
 config.js
-.DS_Store
 node_modules/
-dist/
-.env
 # Local Netlify folder
 .netlify
 TODO.txt

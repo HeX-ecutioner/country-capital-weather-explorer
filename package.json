@@ -1,20 +1,19 @@
 {
     "name": "country-capital-weather-explorer",
     "version": "1.0.0",
-    "description": "A single-page app using **HTML + CSS + vanilla JS** that: - Lets users search for a country (REST Countries API) - Shows country details (flag, name, capital, population) - Fetches current weather for the capital (via **Netlify serverless function + OpenWeatherMap**) - Includes responsive design, loading states, geolocation, and dark mode",
-    "main": "config.js",
+    "description": "A single-page app using **HTML + CSS + vanilla JS** that: - Lets users search for a country (REST Countries API) - Shows country details (flag, name, capital, population) - Fetches current weather for the capital (via **Express.js backend + OpenWeatherMap**) - Includes responsive design, loading states, geolocation, and dark mode",
+    "main": "server.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "netlify dev",
-        "deploy": "netlify deploy"
+        "start": "node server.js",
+        "dev": "node server.js"
     },
     "keywords": [],
     "author": "Sagnik Maitra",
     "license": "MIT",
-    "devDependencies": {
-        "netlify-cli": "^23.5.0"
-    },
     "dependencies": {
+        "cors": "^2.8.6",
+        "dotenv": "^17.4.2",
+        "express": "^5.2.1",
         "node-fetch": "^2.7.0"
     }
 }

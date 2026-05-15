@@ -1,5 +1,3 @@
-const getOpenWeatherKey = () => window.__CONFIG__?.OPENWEATHER_API_KEY || null;
-
 export async function fetchCountryByName(name) {
     const res = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(name)}?fullText=false`);
     if (!res.ok) throw new Error(`Country not found (status ${res.status})`);
@@ -8,15 +6,7 @@ export async function fetchCountryByName(name) {
 }
 
 export async function fetchWeatherForCity(city) {
-    const key = getOpenWeatherKey();
-    if (!key && (location.hostname === 'localhost' || location.hostname === '127.0.0.1'))
-        throw new Error('OpenWeather API key not found.');
-
-    const url = key
-        ? `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${key}`
-        : `/.netlify/functions/getWeather?city=${encodeURIComponent(city)}&units=metric`;
-
-    const res = await fetch(url);
+    const res = await fetch(`/api/weather?city=${encodeURIComponent(city)}&units=metric`);
     if (!res.ok) throw new Error(`Weather fetch failed: ${res.status} ${res.statusText}`);
     return await res.json();
 }

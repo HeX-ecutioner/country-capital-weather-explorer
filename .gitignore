@@ -1,6 +1,4 @@
-# Create this when you need to test locally without using Netlify
-config.js
+# Environment variables
+.env
 node_modules/
-# Local Netlify folder
-.netlify
 TODO.txt

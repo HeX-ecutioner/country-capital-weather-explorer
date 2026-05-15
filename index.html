@@ -14,6 +14,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -43,6 +46,16 @@
                 <div id="resultPanels" class="result-panels hidden">
                     <div id="countryInfo" class="info-panel country-panel"></div>
                     <div id="weatherInfo" class="info-panel weather-panel"></div>
+                    <div id="hourlyPanel" class="info-panel hourly-panel hidden">
+                        <h2>Hourly Forecast</h2>
+                        <div class="hourly-carousel" id="hourlyCarousel"></div>
+                    </div>
+                    <div id="chartPanel" class="info-panel chart-panel hidden">
+                        <h2>5-Day Forecast</h2>
+                        <div class="chart-container">
+                            <canvas id="forecastChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </section>
 

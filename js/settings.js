@@ -1,7 +1,10 @@
-import { renderWeatherItems } from './ui.js';
+import { renderWeatherItems, renderExtendedForecast } from './ui.js';
 
 export let tempUnit = localStorage.getItem('tempUnit') || 'metric';
 let lastWeatherData = null;
+let lastForecastData = null;
+let lastAqiData = null;
+let lastUviData = null;
 
 const darkModeSwitch = document.getElementById('darkModeSwitch'), sliderIcon = darkModeSwitch.querySelector('.icon');
 
@@ -43,7 +46,10 @@ export function setTempUnit(unit, remember = true) {
         tempUnitSwitch.title = 'Switch to Celsius';
     }
     if (remember) localStorage.setItem('tempUnit', unit);
-    if (lastWeatherData) renderWeatherItems(lastWeatherData, lastWeatherData.weather?.[0] || {}, tempUnit);
+    if (lastWeatherData) {
+        renderWeatherItems(lastWeatherData, lastWeatherData.weather?.[0] || {}, tempUnit, lastAqiData, lastUviData);
+        if (lastForecastData) renderExtendedForecast(lastForecastData, tempUnit);
+    }
 }
 
 tempUnitSwitch.addEventListener('click', () => {
@@ -51,8 +57,11 @@ tempUnitSwitch.addEventListener('click', () => {
     setTempUnit(newUnit);
 });
 
-export function setLastWeatherData(data) {
-    lastWeatherData = data;
+export function setAllWeatherData(weather, forecast, aqi, uvi) {
+    lastWeatherData = weather;
+    lastForecastData = forecast;
+    lastAqiData = aqi;
+    lastUviData = uvi;
 }
 
 setTempUnit(tempUnit, false); // Apply saved unit

@@ -17,7 +17,8 @@ export const dom = {
     centralCard: document.querySelector('.central-card'),
     autocompleteList: document.getElementById('autocompleteList'),
     randomBtn: document.getElementById('randomBtn'),
-    inputWrapper: document.querySelector('.input-wrapper')
+    inputWrapper: document.querySelector('.input-wrapper'),
+    weatherOverlay: document.getElementById('weatherOverlay')
 };
 
 
@@ -365,6 +366,59 @@ export function renderTravelFacts(country) {
         div.innerHTML = `<span class="label">${label}:</span><span class="value" style="max-width: 60%; text-align: right;">${value}</span>`;
         dom.travelPanel.appendChild(div);
     });
+}
+
+export function updateWeatherBackground(condition) {
+    const overlay = dom.weatherOverlay;
+    overlay.innerHTML = '';
+    
+    // Default / fallback colors
+    let colors = {
+        b1: '#ffb6ff', b2: '#b6ffff', b3: '#ffd1b6' 
+    };
+    
+    const cond = condition.toLowerCase();
+    
+    if (cond.includes('clear')) {
+        // Sunny/Clear: Vibrant oranges, yellows, and warm ambers
+        colors = { b1: '#fbbf24', b2: '#f59e0b', b3: '#fb923c' };
+    } else if (cond.includes('cloud')) {
+        // Cloudy: Muted grays and soft blues
+        colors = { b1: '#94a3b8', b2: '#64748b', b3: '#cbd5e1' };
+    } else if (cond.includes('rain') || cond.includes('drizzle') || cond.includes('thunderstorm') || cond.includes('squall')) {
+        // Rainy/Stormy: Deep, moody blues and slate grays
+        colors = { b1: '#1e3a8a', b2: '#334155', b3: '#1e40af' };
+        createParticles('rain');
+    } else if (cond.includes('snow')) {
+        // Snowy: Icy whites and crystal-clear blues
+        colors = { b1: '#f8fafc', b2: '#bae6fd', b3: '#e0f2fe' };
+        createParticles('snow');
+    } else if (cond.includes('mist') || cond.includes('fog') || cond.includes('haze') || cond.includes('dust') || cond.includes('sand') || cond.includes('ash') || cond.includes('smoke')) {
+        // Misty/Foggy: Soft whites and hazy neutrals
+        colors = { b1: '#e2e8f0', b2: '#94a3b8', b3: '#f1f5f9' };
+    }
+
+    document.documentElement.style.setProperty('--blob-1', colors.b1);
+    document.documentElement.style.setProperty('--blob-2', colors.b2);
+    document.documentElement.style.setProperty('--blob-3', colors.b3);
+
+    function createParticles(type) {
+        const count = type === 'rain' ? 80 : 50;
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.className = type === 'rain' ? 'rain-drop' : 'snow-flake';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+            p.style.animationDelay = Math.random() * 2 + 's';
+            if (type === 'snow') {
+                const size = Math.random() * 5 + 3 + 'px';
+                p.style.width = size;
+                p.style.height = size;
+                p.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            }
+            overlay.appendChild(p);
+        }
+    }
 }
 
 export function renderAutocomplete(list, onSelect) {

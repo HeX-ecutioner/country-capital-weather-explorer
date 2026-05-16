@@ -1,5 +1,5 @@
 import { fetchCountryByName, fetchWeatherForCity, reverseGeocode, fetchForecastForCity, fetchAirPollution, fetchUvi, fetchExchangeRates, fetchWikipediaSummary, fetchAllCountries } from './api.js';
-import { dom, showLoading, clearPanels, renderCountryInfo, renderWeatherItems, renderExtendedForecast, renderTime, renderCurrency, renderWiki, renderTravelFacts, renderAutocomplete } from './ui.js';
+import { dom, showLoading, clearPanels, renderCountryInfo, renderWeatherItems, renderExtendedForecast, renderTime, renderCurrency, renderWiki, renderTravelFacts, renderAutocomplete, updateWeatherBackground } from './ui.js';
 import { tempUnit, setAllWeatherData } from './settings.js';
 
 let lastCountry = null, lastCapital = null;
@@ -80,6 +80,7 @@ async function renderWeatherInfo(city) {
         
         const w = weather.weather?.[0] || {};
         renderWeatherItems(weather, w, tempUnit, aqiData, uviData);
+        updateWeatherBackground(w.main || '');
         if (weather.timezone !== undefined) {
             renderTime(weather.timezone);
         }

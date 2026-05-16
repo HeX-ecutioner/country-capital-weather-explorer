@@ -35,11 +35,6 @@ body.dark {
     --input-bg: rgba(0, 0, 0, 0.25);
     --btn-bg: rgba(51, 65, 85, 0.85);
     --btn-hover: rgba(71, 85, 105, 1);
-
-    /* Dark Blobs */
-    --blob-1: #6d28d9;
-    --blob-2: #0369a1;
-    --blob-3: #9f1239;
 }
 
 * {
@@ -115,6 +110,47 @@ body {
     100% {
         transform: translate(-5vw, 15vw) scale(0.9) rotate(360deg);
     }
+}
+
+/* --- Weather Overlay & Particles --- */
+.weather-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.rain-drop {
+    position: absolute;
+    width: 2px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    animation: fall-rain linear infinite;
+}
+
+@keyframes fall-rain {
+    0% { transform: translateY(-100px); }
+    100% { transform: translateY(110vh); }
+}
+
+.snow-flake {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(1px);
+    opacity: 0.8;
+    animation: fall-snow linear infinite;
+}
+
+@keyframes fall-snow {
+    0% { transform: translateY(-20px) translateX(0); }
+    100% { transform: translateY(110vh) translateX(40px); }
 }
 
 /* --- Layout --- */

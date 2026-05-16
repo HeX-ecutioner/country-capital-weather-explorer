@@ -1,9 +1,8 @@
-import { fetchCountryByName, fetchWeatherForCity, reverseGeocode, fetchForecastForCity, fetchAirPollution, fetchUvi, fetchExchangeRates, fetchWikipediaSummary, fetchAllCountries } from './api.js';
+import { fetchCountryByName, fetchWeatherForCity, reverseGeocode, fetchForecastForCity, fetchAirPollution, fetchUvi, fetchExchangeRates, fetchWikipediaSummary, fetchAllCountries } from './functions.js';
 import { dom, showLoading, clearPanels, renderCountryInfo, renderWeatherItems, renderExtendedForecast, renderTime, renderCurrency, renderWiki, renderTravelFacts, renderAutocomplete, updateWeatherBackground, renderDisasterInfo } from './ui.js';
 import { tempUnit, setAllWeatherData } from './settings.js';
 
-let lastCountry = null, lastCapital = null;
-let countryNames = [];
+let lastCountry = null, lastCapital = null, countryNames = [];
 
 async function loadCountryNames() {
     try {
@@ -32,7 +31,6 @@ async function handleRandom() {
     if (!countryNames.length) await loadCountryNames();
     if (!countryNames.length) return;
 
-    // Shuffle animation
     let count = 0;
     dom.randomBtn.disabled = true;
     const interval = setInterval(() => {
@@ -47,20 +45,14 @@ async function handleRandom() {
     }, 80);
 }
 
-
 async function renderWeatherInfo(city) {
     dom.weatherInfoDiv.innerHTML = '';
     showLoading(true, 'Fetching weather…');
 
     try {
         const weather = await fetchWeatherForCity(city);
-        
-        let aqiData = null;
-        let uviData = null;
-        let forecastData = null;
-
-        const lat = weather.coord?.lat;
-        const lon = weather.coord?.lon;
+        let aqiData = null, uviData = null, forecastData = null;
+        const lat = weather.coord?.lat, lon = weather.coord?.lon;
 
         try {
             const extraData = await Promise.allSettled([
@@ -68,7 +60,7 @@ async function renderWeatherInfo(city) {
                 (lat && lon) ? fetchAirPollution(lat, lon) : Promise.resolve(null),
                 (lat && lon) ? fetchUvi(lat, lon) : Promise.resolve(null)
             ]);
-            
+
             if (extraData[0].status === 'fulfilled') forecastData = extraData[0].value;
             if (extraData[1].status === 'fulfilled') aqiData = extraData[1].value;
             if (extraData[2].status === 'fulfilled') uviData = extraData[2].value;
@@ -77,17 +69,15 @@ async function renderWeatherInfo(city) {
         }
 
         setAllWeatherData(weather, forecastData, aqiData, uviData);
-        
+
         const w = weather.weather?.[0] || {};
         renderWeatherItems(weather, w, tempUnit, aqiData, uviData);
         renderDisasterInfo(weather, uviData);
         updateWeatherBackground(w.main || '');
-        if (weather.timezone !== undefined) {
-            renderTime(weather.timezone);
-        }
-        if (forecastData) {
-            renderExtendedForecast(forecastData, tempUnit);
-        }
+
+        if (weather.timezone !== undefined) renderTime(weather.timezone);
+        if (forecastData) renderExtendedForecast(forecastData, tempUnit);
+
         dom.resultPanels.classList.remove('hidden');
         dom.centralCard.classList.add('expanded');
     } catch (err) {
@@ -111,10 +101,8 @@ async function handleSearch(countryName) {
         renderCountryInfo(country);
         renderTravelFacts(country);
         dom.centralCard.classList.add('expanded');
-        
-        let ratesData = null;
-        let wikiData = null;
-        
+
+        let ratesData = null, wikiData = null;
         try {
             const currencyCode = Object.keys(country.currencies || {})[0];
             const extraCountryData = await Promise.allSettled([
@@ -123,16 +111,15 @@ async function handleSearch(countryName) {
             ]);
             if (extraCountryData[0].status === 'fulfilled') ratesData = extraCountryData[0].value;
             if (extraCountryData[1].status === 'fulfilled') wikiData = extraCountryData[1].value;
-        } catch(e) {
+        } catch (e) {
             console.warn("Failed to fetch extra country data", e);
         }
-        
+
         renderCurrency(country, ratesData);
         renderWiki(wikiData);
 
-        if (lastCapital) {
-            await renderWeatherInfo(lastCapital);
-        }
+        if (lastCapital) await renderWeatherInfo(lastCapital);
+
     } catch (err) {
         dom.countryInfoDiv.textContent = `Error: ${err.message}`;
         dom.weatherInfoDiv.textContent = '';
@@ -185,7 +172,7 @@ function init() {
         dom.autocompleteList.classList.add('hidden');
         handleSearch(dom.countryInput.value);
     });
-    dom.countryInput.addEventListener('keyup', e => { 
+    dom.countryInput.addEventListener('keyup', e => {
         if (e.key === 'Enter') {
             dom.autocompleteList.classList.add('hidden');
             handleSearch(dom.countryInput.value);
@@ -196,9 +183,7 @@ function init() {
     dom.randomBtn.addEventListener('click', handleRandom);
 
     document.addEventListener('click', (e) => {
-        if (dom.inputWrapper && !dom.inputWrapper.contains(e.target)) {
-            dom.autocompleteList.classList.add('hidden');
-        }
+        if (dom.inputWrapper && !dom.inputWrapper.contains(e.target)) dom.autocompleteList.classList.add('hidden');
     });
 }
 

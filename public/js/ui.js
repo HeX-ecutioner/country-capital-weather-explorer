@@ -37,7 +37,7 @@ export function clearPanels() {
     dom.currencyPanel.innerHTML = '';
     dom.wikiPanel.innerHTML = '';
     dom.travelPanel.innerHTML = '';
-    
+
     dom.resultPanels.classList.add('hidden');
     dom.hourlyPanel.classList.add('hidden');
     dom.chartPanel.classList.add('hidden');
@@ -49,7 +49,7 @@ export function clearPanels() {
     dom.centralCard.classList.remove('expanded');
     dom.autocompleteList.innerHTML = '';
     dom.autocompleteList.classList.add('hidden');
-    
+
     dom.hourlyCarousel.innerHTML = '';
     if (chartInstance) {
         chartInstance.destroy();
@@ -104,7 +104,7 @@ export function renderWeatherItems(weather, w, tempUnit, aqiData, uviData) {
         feels = tempUnit === 'metric' ? Math.round(weather.main.feels_like) : Math.round(weather.main.feels_like * 9 / 5 + 32);
 
     const getAQIString = (aqi) => {
-        switch(aqi) {
+        switch (aqi) {
             case 1: return 'Good';
             case 2: return 'Fair';
             case 3: return 'Moderate';
@@ -113,7 +113,7 @@ export function renderWeatherItems(weather, w, tempUnit, aqiData, uviData) {
             default: return 'Unknown';
         }
     };
-    
+
     let aqiStr = aqiData?.list?.[0]?.main?.aqi ? `${aqiData.list[0].main.aqi} (${getAQIString(aqiData.list[0].main.aqi)})` : 'N/A';
     let uviStr = uviData?.value != null ? uviData.value : 'N/A';
 
@@ -167,13 +167,11 @@ export function renderExtendedForecast(forecastData, tempUnit) {
 
     const tempUnitSymbol = tempUnit === 'metric' ? '°C' : '°F';
     const isMetric = tempUnit === 'metric';
-
-    // Parse data for the next 24 hours (8 periods of 3 hours)
-    const next24 = forecastData.list.slice(0, 8);
+    const next24 = forecastData.list.slice(0, 8); // Parse data for the next 24 hours (8 periods of 3 hours)
     dom.hourlyCarousel.innerHTML = '';
     next24.forEach(item => {
         const t = isMetric ? Math.round(item.main.temp) : Math.round(item.main.temp * 9 / 5 + 32);
-        const time = new Date(item.dt * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const time = new Date(item.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const icon = item.weather[0].icon;
 
         const div = document.createElement('div');
@@ -186,15 +184,12 @@ export function renderExtendedForecast(forecastData, tempUnit) {
         dom.hourlyCarousel.appendChild(div);
     });
 
-    // Parse data for 5-day chart (group by day or just use 12:00 PM for each day)
-    const labels = [];
-    const temps = [];
-    
-    // Simple filter: take one reading per day around noon
-    forecastData.list.forEach(item => {
+    const labels = [], temps = []; // Parse data for 5-day chart (group by day or just use 12:00 PM for each day)
+
+    forecastData.list.forEach(item => { // Simple filter: take one reading per day around noon
         if (item.dt_txt.includes('12:00:00')) {
             const t = isMetric ? Math.round(item.main.temp) : Math.round(item.main.temp * 9 / 5 + 32);
-            const dateStr = new Date(item.dt * 1000).toLocaleDateString([], {weekday: 'short', month: 'short', day: 'numeric'});
+            const dateStr = new Date(item.dt * 1000).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
             labels.push(dateStr);
             temps.push(t);
         }
@@ -203,15 +198,13 @@ export function renderExtendedForecast(forecastData, tempUnit) {
     if (labels.length === 0) {
         forecastData.list.filter((_, i) => i % 8 === 0).forEach(item => {
             const t = isMetric ? Math.round(item.main.temp) : Math.round(item.main.temp * 9 / 5 + 32);
-            const dateStr = new Date(item.dt * 1000).toLocaleDateString([], {weekday: 'short'});
+            const dateStr = new Date(item.dt * 1000).toLocaleDateString([], { weekday: 'short' });
             labels.push(dateStr);
             temps.push(t);
         });
     }
 
-    if (chartInstance) {
-        chartInstance.destroy();
-    }
+    if (chartInstance) chartInstance.destroy();
 
     const ctx = dom.forecastChart.getContext('2d');
     const colorLine = document.body.classList.contains('dark') ? '#60a5fa' : '#3b82f6';
@@ -254,7 +247,7 @@ export function renderExtendedForecast(forecastData, tempUnit) {
 export function renderTime(weatherTimezoneOffset) {
     dom.timePanel.classList.remove('hidden');
     dom.timePanel.innerHTML = '';
-    
+
     const title = document.createElement('h2');
     title.innerHTML = '🕒 Local Time';
     dom.timePanel.appendChild(title);
@@ -266,15 +259,15 @@ export function renderTime(weatherTimezoneOffset) {
     timeDisplay.style.textAlign = 'center';
     timeDisplay.style.margin = 'auto 0';
     dom.timePanel.appendChild(timeDisplay);
-    
+
     const updateClock = () => {
         const now = new Date();
         const localTime = new Date(now.getTime() + weatherTimezoneOffset * 1000);
         timeDisplay.textContent = localTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' });
     };
-    
+
     updateClock();
-    if(window.clockInterval) clearInterval(window.clockInterval);
+    if (window.clockInterval) clearInterval(window.clockInterval);
     window.clockInterval = setInterval(updateClock, 1000);
 }
 
@@ -287,9 +280,9 @@ export function renderCurrency(country, rates) {
     title.innerHTML = '💱 Currency';
     dom.currencyPanel.appendChild(title);
 
-    const currencyCode = Object.keys(country.currencies)[0];
-    const currencyInfo = country.currencies[currencyCode];
-    
+    const currencyCode = Object.keys(country.currencies)[0],
+        currencyInfo = country.currencies[currencyCode];
+
     const currName = document.createElement('div');
     currName.innerHTML = `<strong>${currencyInfo.name}</strong> (${currencyInfo.symbol || currencyCode})`;
     currName.style.fontSize = '1.2rem';
@@ -373,31 +366,23 @@ export function renderTravelFacts(country) {
 export function updateWeatherBackground(condition) {
     const overlay = dom.weatherOverlay;
     overlay.innerHTML = '';
-    
-    // Default / fallback colors
-    let colors = {
-        b1: '#ffb6ff', b2: '#b6ffff', b3: '#ffd1b6' 
+    let colors = { // Default / fallback colors
+        b1: '#ffb6ff', b2: '#b6ffff', b3: '#ffd1b6'
     };
-    
+
     const cond = condition.toLowerCase();
-    
     if (cond.includes('clear')) {
-        // Sunny/Clear: Vibrant oranges, yellows, and warm ambers
-        colors = { b1: '#fbbf24', b2: '#f59e0b', b3: '#fb923c' };
+        colors = { b1: '#fbbf24', b2: '#f59e0b', b3: '#fb923c' }; // Sunny/Clear: Vibrant oranges, yellows, and warm ambers
     } else if (cond.includes('cloud')) {
-        // Cloudy: Muted grays and soft blues
-        colors = { b1: '#94a3b8', b2: '#64748b', b3: '#cbd5e1' };
+        colors = { b1: '#94a3b8', b2: '#64748b', b3: '#cbd5e1' }; // Cloudy: Muted grays and soft blues
     } else if (cond.includes('rain') || cond.includes('drizzle') || cond.includes('thunderstorm') || cond.includes('squall')) {
-        // Rainy/Stormy: Deep, moody blues and slate grays
-        colors = { b1: '#1e3a8a', b2: '#334155', b3: '#1e40af' };
+        colors = { b1: '#1e3a8a', b2: '#334155', b3: '#1e40af' }; // Rainy/Stormy: Deep, moody blues and slate grays
         createParticles('rain');
     } else if (cond.includes('snow')) {
-        // Snowy: Icy whites and crystal-clear blues
-        colors = { b1: '#f8fafc', b2: '#bae6fd', b3: '#e0f2fe' };
+        colors = { b1: '#f8fafc', b2: '#bae6fd', b3: '#e0f2fe' }; // Snowy: Icy whites and crystal-clear blues
         createParticles('snow');
     } else if (cond.includes('mist') || cond.includes('fog') || cond.includes('haze') || cond.includes('dust') || cond.includes('sand') || cond.includes('ash') || cond.includes('smoke')) {
-        // Misty/Foggy: Soft whites and hazy neutrals
-        colors = { b1: '#e2e8f0', b2: '#94a3b8', b3: '#f1f5f9' };
+        colors = { b1: '#e2e8f0', b2: '#94a3b8', b3: '#f1f5f9' }; // Misty/Foggy: Soft whites and hazy neutrals
     }
 
     document.documentElement.style.setProperty('--blob-1', colors.b1);
@@ -447,14 +432,14 @@ export function renderDisasterInfo(weather, uvi) {
     dom.disasterPanel.classList.remove('hidden');
     dom.disasterPanel.innerHTML = '<h2>🚨 Disaster & Safety</h2>';
 
-    const temp = weather.main.temp;
-    const condition = weather.weather[0].main;
-    const uviVal = uvi || 0;
+    const temp = weather.main.temp,
+        condition = weather.weather[0].main,
+        uviVal = uvi || 0;
 
-    let riskLevel = 'Low Risk';
-    let riskClass = 'risk-low';
-    let prediction = '✅ No major disaster expected.';
-    let tips = 'Stay updated with local alerts.';
+    let riskLevel = 'Low Risk',
+        riskClass = 'risk-low',
+        prediction = '✅ No major disaster expected.',
+        tips = 'Stay updated with local alerts.';
 
     if (condition.includes('Rain') || condition.includes('Thunderstorm')) {
         riskLevel = 'High Risk';

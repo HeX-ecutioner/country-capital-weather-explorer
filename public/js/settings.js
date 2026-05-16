@@ -1,11 +1,7 @@
 import { renderWeatherItems, renderExtendedForecast } from './ui.js';
 
 export let tempUnit = localStorage.getItem('tempUnit') || 'metric';
-let lastWeatherData = null;
-let lastForecastData = null;
-let lastAqiData = null;
-let lastUviData = null;
-
+let lastWeatherData = null, lastForecastData = null, lastAqiData = null, lastUviData = null;
 const darkModeSwitch = document.getElementById('darkModeSwitch'), sliderIcon = darkModeSwitch.querySelector('.icon');
 
 export function setDarkMode(enabled, remember = true) {
@@ -58,10 +54,7 @@ tempUnitSwitch.addEventListener('click', () => {
 });
 
 export function setAllWeatherData(weather, forecast, aqi, uvi) {
-    lastWeatherData = weather;
-    lastForecastData = forecast;
-    lastAqiData = aqi;
-    lastUviData = uvi;
+    lastWeatherData = weather; lastForecastData = forecast; lastAqiData = aqi; lastUviData = uvi;
 }
 
 setTempUnit(tempUnit, false); // Apply saved unit

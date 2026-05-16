@@ -18,7 +18,8 @@ export const dom = {
     autocompleteList: document.getElementById('autocompleteList'),
     randomBtn: document.getElementById('randomBtn'),
     inputWrapper: document.querySelector('.input-wrapper'),
-    weatherOverlay: document.getElementById('weatherOverlay')
+    weatherOverlay: document.getElementById('weatherOverlay'),
+    disasterPanel: document.getElementById('disasterPanel')
 };
 
 
@@ -44,6 +45,7 @@ export function clearPanels() {
     dom.currencyPanel.classList.add('hidden');
     dom.wikiPanel.classList.add('hidden');
     dom.travelPanel.classList.add('hidden');
+    dom.disasterPanel.classList.add('hidden');
     dom.centralCard.classList.remove('expanded');
     dom.autocompleteList.innerHTML = '';
     dom.autocompleteList.classList.add('hidden');
@@ -439,4 +441,63 @@ export function renderAutocomplete(list, onSelect) {
         dom.autocompleteList.appendChild(div);
     });
     dom.autocompleteList.classList.remove('hidden');
+}
+
+export function renderDisasterInfo(weather, uvi) {
+    dom.disasterPanel.classList.remove('hidden');
+    dom.disasterPanel.innerHTML = '<h2>🚨 Disaster & Safety</h2>';
+
+    const temp = weather.main.temp;
+    const condition = weather.weather[0].main;
+    const uviVal = uvi || 0;
+
+    let riskLevel = 'Low Risk';
+    let riskClass = 'risk-low';
+    let prediction = '✅ No major disaster expected.';
+    let tips = 'Stay updated with local alerts.';
+
+    if (condition.includes('Rain') || condition.includes('Thunderstorm')) {
+        riskLevel = 'High Risk';
+        riskClass = 'risk-high';
+        prediction = '🌊 Flood risk possible. Avoid low areas.';
+        tips = 'Seek higher ground and avoid travel near rivers.';
+    } else if (temp > 40 || uviVal > 8) {
+        riskLevel = 'High Risk';
+        riskClass = 'risk-high';
+        prediction = '🔥 Extreme heat/UV alert. Stay hydrated.';
+        tips = 'Avoid direct sun exposure and wear high SPF.';
+    } else if (temp > 35 || condition.includes('Cloud') || uviVal > 5) {
+        riskLevel = 'Moderate Risk';
+        riskClass = 'risk-moderate';
+        prediction = '⚠️ Moderate conditions. Stay alert.';
+        tips = 'Carry water and check local weather frequently.';
+    }
+
+    const badge = document.createElement('div');
+    badge.className = `risk-badge ${riskClass}`;
+    badge.textContent = riskLevel;
+    dom.disasterPanel.appendChild(badge);
+
+    const predDiv = document.createElement('div');
+    predDiv.className = 'info-item';
+    predDiv.style.fontWeight = '600';
+    predDiv.style.marginBottom = '0.5rem';
+    predDiv.textContent = prediction;
+    dom.disasterPanel.appendChild(predDiv);
+
+    const tipsDiv = document.createElement('div');
+    tipsDiv.className = 'safety-tips';
+    tipsDiv.innerHTML = `<strong>💡 Safety Tips:</strong><br>${tips}`;
+    dom.disasterPanel.appendChild(tipsDiv);
+
+    const mapBtn = document.createElement('button');
+    mapBtn.className = 'safety-btn';
+    mapBtn.style.marginTop = '1rem';
+    mapBtn.style.width = '100%';
+    mapBtn.innerHTML = '📍 Find Nearby Safety & Hospitals';
+    mapBtn.addEventListener('click', () => {
+        const query = encodeURIComponent(`hospitals and emergency services in ${weather.name}`);
+        window.open(`https://www.google.com/maps/search/${query}`, '_blank');
+    });
+    dom.disasterPanel.appendChild(mapBtn);
 }

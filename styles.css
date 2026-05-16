@@ -349,6 +349,45 @@ body.dark .autocomplete-item:hover {
     border-bottom: none;
 }
 
+/* --- Disaster Panel --- */
+.disaster-panel .risk-badge {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.risk-low { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+.risk-moderate { background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
+.risk-high { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+.safety-btn {
+    width: 100%;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    text-transform: none;
+    letter-spacing: 0.5px;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+}
+
+.safety-btn:hover {
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+.safety-tips {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+
 /* --- Result Panels --- */
 .loading {
     text-align: center;
@@ -387,7 +426,7 @@ body.dark .autocomplete-item:hover {
     grid-template-areas: 
         "weather  country  time     currency"
         "weather  country  travel   travel"
-        "weather  wiki     wiki     wiki"
+        "weather  wiki     wiki     disaster"
         "hourly   hourly   hourly   hourly"
         "chart    chart    chart    chart";
     grid-auto-rows: min-content;
@@ -403,6 +442,7 @@ body.dark .autocomplete-item:hover {
 #currencyPanel { grid-area: currency; }
 #wikiPanel     { grid-area: wiki; }
 #travelPanel   { grid-area: travel; }
+#disasterPanel { grid-area: disaster; }
 #hourlyPanel   { grid-area: hourly; }
 #chartPanel    { grid-area: chart; }
 
@@ -598,6 +638,7 @@ body.dark #darkModeSwitch .slider {
             "weather  currency"
             "travel   travel"
             "wiki     wiki"
+            "disaster disaster"
             "hourly   hourly"
             "chart    chart";
         min-width: 100%;
@@ -614,6 +655,7 @@ body.dark #darkModeSwitch .slider {
             "currency"
             "travel"
             "wiki"
+            "disaster"
             "hourly"
             "chart";
     }

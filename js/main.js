@@ -1,8 +1,52 @@
-import { fetchCountryByName, fetchWeatherForCity, reverseGeocode, fetchForecastForCity, fetchAirPollution, fetchUvi, fetchExchangeRates, fetchWikipediaSummary } from './api.js';
-import { dom, showLoading, clearPanels, renderCountryInfo, renderWeatherItems, renderExtendedForecast, renderTime, renderCurrency, renderWiki, renderTravelFacts } from './ui.js';
+import { fetchCountryByName, fetchWeatherForCity, reverseGeocode, fetchForecastForCity, fetchAirPollution, fetchUvi, fetchExchangeRates, fetchWikipediaSummary, fetchAllCountries } from './api.js';
+import { dom, showLoading, clearPanels, renderCountryInfo, renderWeatherItems, renderExtendedForecast, renderTime, renderCurrency, renderWiki, renderTravelFacts, renderAutocomplete } from './ui.js';
 import { tempUnit, setAllWeatherData } from './settings.js';
 
 let lastCountry = null, lastCapital = null;
+let countryNames = [];
+
+async function loadCountryNames() {
+    try {
+        const countries = await fetchAllCountries();
+        countryNames = countries.map(c => c.name.common).sort();
+    } catch (e) {
+        console.error("Failed to load country names", e);
+    }
+}
+
+function handleInput(e) {
+    const val = e.target.value.trim();
+    if (val.length < 2) {
+        dom.autocompleteList.classList.add('hidden');
+        return;
+    }
+    const matches = countryNames.filter(name => name.toLowerCase().includes(val.toLowerCase())).slice(0, 8);
+    renderAutocomplete(matches, (name) => {
+        dom.countryInput.value = name;
+        dom.autocompleteList.classList.add('hidden');
+        handleSearch(name);
+    });
+}
+
+async function handleRandom() {
+    if (!countryNames.length) await loadCountryNames();
+    if (!countryNames.length) return;
+
+    // Shuffle animation
+    let count = 0;
+    dom.randomBtn.disabled = true;
+    const interval = setInterval(() => {
+        const randomName = countryNames[Math.floor(Math.random() * countryNames.length)];
+        dom.countryInput.value = randomName;
+        count++;
+        if (count > 12) {
+            clearInterval(interval);
+            dom.randomBtn.disabled = false;
+            handleSearch(dom.countryInput.value);
+        }
+    }, 80);
+}
+
 
 async function renderWeatherInfo(city) {
     dom.weatherInfoDiv.innerHTML = '';
@@ -134,9 +178,26 @@ async function handleGeolocation() {
 }
 
 function init() {
-    dom.searchBtn.addEventListener('click', () => handleSearch(dom.countryInput.value));
-    dom.countryInput.addEventListener('keyup', e => { if (e.key === 'Enter') handleSearch(dom.countryInput.value); });
+    loadCountryNames();
+    dom.searchBtn.addEventListener('click', () => {
+        dom.autocompleteList.classList.add('hidden');
+        handleSearch(dom.countryInput.value);
+    });
+    dom.countryInput.addEventListener('keyup', e => { 
+        if (e.key === 'Enter') {
+            dom.autocompleteList.classList.add('hidden');
+            handleSearch(dom.countryInput.value);
+        }
+    });
+    dom.countryInput.addEventListener('input', handleInput);
     dom.geoBtn.addEventListener('click', handleGeolocation);
+    dom.randomBtn.addEventListener('click', handleRandom);
+
+    document.addEventListener('click', (e) => {
+        if (dom.inputWrapper && !dom.inputWrapper.contains(e.target)) {
+            dom.autocompleteList.classList.add('hidden');
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', init);

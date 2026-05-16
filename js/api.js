@@ -46,3 +46,9 @@ export async function fetchWikipediaSummary(query) {
     if (!res.ok) throw new Error(`Wikipedia fetch failed: ${res.status}`);
     return await res.json();
 }
+
+export async function fetchAllCountries() {
+    const res = await fetch(`https://restcountries.com/v3.1/all?fields=name`);
+    if (!res.ok) throw new Error(`Failed to fetch all countries: ${res.status}`);
+    return await res.json();
+}

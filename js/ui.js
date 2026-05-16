@@ -14,7 +14,10 @@ export const dom = {
     currencyPanel: document.getElementById('currencyPanel'),
     wikiPanel: document.getElementById('wikiPanel'),
     travelPanel: document.getElementById('travelPanel'),
-    centralCard: document.querySelector('.central-card')
+    centralCard: document.querySelector('.central-card'),
+    autocompleteList: document.getElementById('autocompleteList'),
+    randomBtn: document.getElementById('randomBtn'),
+    inputWrapper: document.querySelector('.input-wrapper')
 };
 
 
@@ -41,6 +44,8 @@ export function clearPanels() {
     dom.wikiPanel.classList.add('hidden');
     dom.travelPanel.classList.add('hidden');
     dom.centralCard.classList.remove('expanded');
+    dom.autocompleteList.innerHTML = '';
+    dom.autocompleteList.classList.add('hidden');
     
     dom.hourlyCarousel.innerHTML = '';
     if (chartInstance) {
@@ -360,4 +365,24 @@ export function renderTravelFacts(country) {
         div.innerHTML = `<span class="label">${label}:</span><span class="value" style="max-width: 60%; text-align: right;">${value}</span>`;
         dom.travelPanel.appendChild(div);
     });
+}
+
+export function renderAutocomplete(list, onSelect) {
+    dom.autocompleteList.innerHTML = '';
+    if (!list.length) {
+        dom.autocompleteList.classList.add('hidden');
+        return;
+    }
+
+    list.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'autocomplete-item';
+        div.textContent = item;
+        div.addEventListener('click', () => {
+            onSelect(item);
+            dom.autocompleteList.classList.add('hidden');
+        });
+        dom.autocompleteList.appendChild(div);
+    });
+    dom.autocompleteList.classList.remove('hidden');
 }

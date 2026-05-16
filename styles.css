@@ -172,20 +172,25 @@ header {
 .search-area {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .search-area .row {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    align-items: stretch;
+    gap: 0.8rem;
+    width: 100%;
     flex-wrap: wrap;
 }
 
 input[type="text"] {
-    flex: 1;
-    min-width: 280px;
-    padding: 1rem 1.5rem;
+    width: 100%;
+    padding: 1rem 1.5rem 1rem 3.2rem;
     border-radius: 16px;
     border: 1px solid var(--glass-border);
     background: var(--input-bg);
@@ -248,6 +253,64 @@ button:active {
     font-size: 0.95rem;
     margin-top: 0.4rem;
     font-weight: 500;
+}
+
+.input-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.input-wrapper::before {
+    content: '🔍';
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    opacity: 0.6;
+    z-index: 1;
+}
+
+.autocomplete-list {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.autocomplete-item {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+    font-weight: 500;
+}
+
+body.dark .autocomplete-item {
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.autocomplete-item:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+body.dark .autocomplete-item:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
 }
 
 /* --- Result Panels --- */

@@ -34,9 +34,13 @@
 
             <section class="search-area">
                 <div class="row">
-                    <input id="countryInput" type="text" placeholder="Enter country name (e.g. France)">
+                    <div class="input-wrapper">
+                        <input id="countryInput" type="text" placeholder="Enter country name (e.g. France)" autocomplete="off">
+                        <div id="autocompleteList" class="autocomplete-list hidden"></div>
+                    </div>
                     <button id="searchBtn">Search</button>
                     <button id="geoBtn" title="Find my country via Geolocation">Use My Location</button>
+                    <button id="randomBtn" title="Pick a random country for me!">Take Me Anywhere 🎲</button>
                 </div>
                 <div class="hint">Tip: Try "India", "Japan" or "USA"</div>
             </section>

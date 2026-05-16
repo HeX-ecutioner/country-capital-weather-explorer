@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
@@ -7,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.static('.')); // Serve static files from the root directory
+app.use(express.static(path.join(__dirname, '../public'))); // Serve static files from the public directory
 
 app.get('/api/weather', async (req, res) => {
     const { city, units } = req.query;
@@ -99,6 +100,10 @@ app.get('/api/uvi', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running locally on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server is running locally on http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;

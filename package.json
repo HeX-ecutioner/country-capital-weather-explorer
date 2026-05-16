@@ -2,10 +2,10 @@
     "name": "terrabrewer",
     "version": "1.0.0",
     "description": "A single-page web application using HTML + CSS + vanilla JS that lets users search for a country and shows its details, along with current weather data for the capital",
-    "main": "server.js",
+    "main": "api/index.js",
     "scripts": {
-        "start": "node server.js",
-        "dev": "node server.js"
+        "start": "node api/index.js",
+        "dev": "node api/index.js"
     },
     "keywords": [],
     "author": "Sagnik Maitra",

@@ -41,8 +41,10 @@ body.dark {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
 }
 
 ::-webkit-scrollbar {
@@ -134,8 +136,13 @@ body {
 }
 
 @keyframes fall-rain {
-    0% { transform: translateY(-100px); }
-    100% { transform: translateY(110vh); }
+    0% {
+        transform: translateY(-100px);
+    }
+
+    100% {
+        transform: translateY(110vh);
+    }
 }
 
 .snow-flake {
@@ -149,8 +156,13 @@ body {
 }
 
 @keyframes fall-snow {
-    0% { transform: translateY(-20px) translateX(0); }
-    100% { transform: translateY(110vh) translateX(40px); }
+    0% {
+        transform: translateY(-20px) translateX(0);
+    }
+
+    100% {
+        transform: translateY(110vh) translateX(40px);
+    }
 }
 
 /* --- Layout --- */
@@ -329,20 +341,20 @@ button:active {
     padding: 1rem 1.5rem;
     cursor: pointer;
     transition: background 0.2s ease;
-    border-bottom: 1px solid rgba(0,0,0,0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
     font-weight: 500;
 }
 
 body.dark .autocomplete-item {
-    border-bottom: 1px solid rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .autocomplete-item:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 body.dark .autocomplete-item:hover {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .autocomplete-item:last-child {
@@ -359,9 +371,23 @@ body.dark .autocomplete-item:hover {
     margin-bottom: 1rem;
 }
 
-.risk-low { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
-.risk-moderate { background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
-.risk-high { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+.risk-low {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.risk-moderate {
+    background: rgba(234, 179, 8, 0.2);
+    color: #eab308;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.risk-high {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
 
 .safety-btn {
     width: 100%;
@@ -423,7 +449,7 @@ body.dark .autocomplete-item:hover {
 .result-panels {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-areas: 
+    grid-template-areas:
         "weather  country  time     currency"
         "weather  country  travel   travel"
         "weather  wiki     wiki     disaster"
@@ -436,15 +462,41 @@ body.dark .autocomplete-item:hover {
     margin-top: 0.5rem;
 }
 
-#countryInfo   { grid-area: country; }
-#weatherInfo   { grid-area: weather; }
-#timePanel     { grid-area: time; }
-#currencyPanel { grid-area: currency; }
-#wikiPanel     { grid-area: wiki; }
-#travelPanel   { grid-area: travel; }
-#disasterPanel { grid-area: disaster; }
-#hourlyPanel   { grid-area: hourly; }
-#chartPanel    { grid-area: chart; }
+#countryInfo {
+    grid-area: country;
+}
+
+#weatherInfo {
+    grid-area: weather;
+}
+
+#timePanel {
+    grid-area: time;
+}
+
+#currencyPanel {
+    grid-area: currency;
+}
+
+#wikiPanel {
+    grid-area: wiki;
+}
+
+#travelPanel {
+    grid-area: travel;
+}
+
+#disasterPanel {
+    grid-area: disaster;
+}
+
+#hourlyPanel {
+    grid-area: hourly;
+}
+
+#chartPanel {
+    grid-area: chart;
+}
 
 .hourly-carousel {
     display: flex;
@@ -453,6 +505,7 @@ body.dark .autocomplete-item:hover {
     padding-bottom: 0.5rem;
     scroll-behavior: smooth;
 }
+
 .hourly-item {
     display: flex;
     flex-direction: column;
@@ -464,17 +517,21 @@ body.dark .autocomplete-item:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border: 1px solid var(--glass-border);
 }
+
 body.dark .hourly-item {
     background: rgba(0, 0, 0, 0.2);
 }
+
 .hourly-item img {
     width: 50px;
 }
+
 .hourly-item .time {
     font-size: 0.9rem;
     color: var(--text-muted);
     margin-bottom: 0.5rem;
 }
+
 .hourly-item .temp {
     font-size: 1.2rem;
     font-weight: 600;
@@ -632,7 +689,7 @@ body.dark #darkModeSwitch .slider {
 @media (max-width: 1200px) {
     .result-panels {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-areas: 
+        grid-template-areas:
             "weather  country"
             "weather  time"
             "weather  currency"
@@ -648,7 +705,7 @@ body.dark #darkModeSwitch .slider {
 @media (max-width: 768px) {
     .result-panels {
         grid-template-columns: 1fr;
-        grid-template-areas: 
+        grid-template-areas:
             "weather"
             "country"
             "time"
@@ -659,13 +716,15 @@ body.dark #darkModeSwitch .slider {
             "hourly"
             "chart";
     }
-    
+
     body {
         overflow: auto;
     }
+
     .central-card {
         max-height: none;
     }
+
     .info-panel {
         height: auto;
         max-height: 50vh;

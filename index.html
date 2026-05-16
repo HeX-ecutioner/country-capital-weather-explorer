@@ -5,19 +5,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
-    <title>Country & Capital Weather Explorer</title>
+    <title>TerraBrewer</title>
 
     <link rel="icon" href="./assets/favicon.png">
-    
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -29,18 +26,19 @@
     <main class="main-container">
         <div class="central-card">
             <header>
-                <h1 class="title">Country & Capital Weather Explorer</h1>
+                <h1 class="title">TerraBrewer</h1>
             </header>
 
             <section class="search-area">
                 <div class="row">
                     <div class="input-wrapper">
-                        <input id="countryInput" type="text" placeholder="Enter country name (e.g. France)" autocomplete="off">
+                        <input id="countryInput" type="text" placeholder="Enter country name (e.g. France)"
+                            autocomplete="off">
                         <div id="autocompleteList" class="autocomplete-list hidden"></div>
                     </div>
                     <button id="searchBtn">Search</button>
                     <button id="geoBtn" title="Find my country via Geolocation">Use My Location</button>
-                    <button id="randomBtn" title="Pick a random country for me!">Take Me Anywhere 🎲</button>
+                    <button id="randomBtn" title="Pick a random country for me!">Take Me Anywhere</but>
                 </div>
                 <div class="hint">Tip: Try "India", "Japan" or "USA"</div>
             </section>

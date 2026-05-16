@@ -1,55 +1,105 @@
-# Country & Capital Weather Explorer ⛅
+<p align="center">
+  <img src="./assets/favicon.png" width="250" alt="TerraBrewer Logo">
+</p>
 
-A single-page app using **HTML + CSS + vanilla JS** that:
-- Lets users search for a country (REST Countries API)
-- Shows country details (flag, name, official name, capital, population)
-- Fetches current weather for the capital (via **Express.js backend + OpenWeatherMap**)
-- Includes responsive design, loading states, geolocation, and dark mode
+# 🌍 TerraBrewer
 
-## How it Works
+A high-performance, secure **global intelligence dashboard** featuring an **Express.js backend** and a visually stunning **Vanilla JS + CSS frontend**. Explore real-time weather, disaster alerts, and comprehensive country metrics through a premium, glassmorphic interface.
 
-1. The user searches for a country.
-2. The app calls the **REST Countries API** to get country info.
-3. After receiving the country info, the app calls a **local Express.js backend**:
-   - The backend retrieves weather from **OpenWeatherMap** using a secure API key (stored as an environment variable).
-   - The frontend never exposes the API key.
-4. The app displays:
-   - Temperature (°C)
-   - Weather description
-   - Weather icon
-5. The **Geolocation button** uses the browser’s geolocation, reverse-geocodes with **Nominatim (OpenStreetMap)**, then runs the same flow.
+## ✨ Features
 
-## Local Setup For Development
+- ⚡ **Express.js Backend** — Lightweight, high-performance proxy server that secures API keys and handles cross-origin requests seamlessly.
+- 🎨 **Glorious UI** — Beautifully crafted, responsive interface featuring intense glassmorphism, fluid micro-animations, and a sleek Light/Dark mode slider toggle.
+- ⛈️ **Real-time Weather** — Live updates and 5-day forecasts fetched via the **OpenWeatherMap API**.
+- 🚨 **Disaster Intelligence** — Integrated real-time disaster alerts and event mapping powered by **GDACS**.
+- 📍 **Safety Locators** — Dynamic lookup of nearby critical infrastructure like hospitals and police stations.
+- 🌍 **Country Metrics** — Detailed geographic and geopolitical data (population, capitals, currencies) via the **REST Countries API**.
+- 📊 **Interactive Analytics** — Visualized environmental trends using **Chart.js** for intuitive forecasting.
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/HeX-ecutioner/country-capital-weather-explorer.git
-   cd YOUR_REPO
-   ```
+## 🧠 Intelligence Approach
+
+TerraBrewer utilizes a **multi-source data fusion engine**:
+
+- **Geographic Data (REST Countries)** → Provides the foundational context for every search.
+- **Environmental Data (OpenWeather)** → Layers real-time atmospheric conditions and predictive trends.
+- **Crisis Data (GDACS)** → Injects critical safety alerts based on the geographic proximity of the user's focus.
+- **Local Context (Nominatim)** → Facilitates reverse-geocoding for precise "Use My Location" functionality.
+
+The application intelligently merges these streams to provide a holistic view of any location on Earth.
+
+## ⚙️ How It Works
+
+1. **User Interaction**: The user enters a country name or triggers geolocation.
+2. **Secure Proxying**: The frontend communicates with a local **Express.js** server.
+3. **API Aggregation**: The backend fetches data from **OpenWeatherMap**, **REST Countries**, and **GDACS** using secure environment variables.
+4. **Data Normalization**: The server cleans and formats the diverse API responses into a unified JSON structure.
+5. **Dynamic Rendering**: The frontend parses the intelligence and dynamically builds:
+    - 🌤️ Weather & Forecast panels
+    - 🚩 Country Identity modules
+    - 🚨 Real-time Disaster alerts
+    - 🏥 Safety Infrastructure maps
+
+## 🚀 Getting Started
+
+### 🔧 Prerequisites
+
+- **Node.js** (v14.x or higher)
+- **OpenWeatherMap API Key** ([Get one here](https://openweathermap.org/api))
+
+### 🛠️ Installation
+
+1. Clone this repository:
+
+```bash
+git clone https://github.com/HeX-ecutioner/terrabrewer.git
+cd terrabrewer
+```
 
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
 
-3. Configure your API key:
-   - Copy `.env.example` to `.env`
-   - Add your OpenWeather API key inside the `.env` file:
-     ```env
-     OPENWEATHER_API_KEY=your_api_key_here
-     ```
+```bash
+npm install
+```
 
-4. Run the app locally:
-   ```bash
-   npm run dev
-   ```
-   This will start the Express server and you can access the app at `http://localhost:3000`.
+3. Create your environment file by duplicating `.env.example`:
 
-## Features
-- ✅ Country info (flag, name, capital, population)
-- ✅ Weather info (temperature °C, description, icon)
-- ✅ Responsive design
-- ✅ Dark mode toggle
-- ✅ Loading states
-- ✅ Geolocation support
-- ✅ Secure API key handling with a local backend
+```bash
+cp .env.example .env
+```
+
+4. Add your API key inside `.env`:
+
+```env
+OPENWEATHER_API_KEY="YOUR_API_KEY_HERE"
+```
+
+### ▶️ Running the App Locally
+
+Start the optimized development server:
+
+```bash
+npm run dev
+```
+
+Then, seamlessly open `http://localhost:3000` in your browser!
+
+## ℹ️ Additional Information
+
+### 📂 APIs Used
+
+- **OpenWeatherMap** — Weather & Forecasts
+- **REST Countries** — Global Country Data
+- **GDACS** — Global Disaster Alerts
+- **Nominatim (OSM)** — Geocoding & Search
+
+### 📦 Dependencies
+
+- **express** — Backend Framework
+- **dotenv** — Environment Management
+- **node-fetch** — Server-side API Requests
+- **cors** — Cross-Origin Resource Sharing
+- **Chart.js** — Frontend Data Visualization
+
+### ⚖️ License
+
+This app uses the [MIT License](LICENSE)

@@ -9,8 +9,14 @@ export const dom = {
     hourlyPanel: document.getElementById('hourlyPanel'),
     chartPanel: document.getElementById('chartPanel'),
     hourlyCarousel: document.getElementById('hourlyCarousel'),
-    forecastChart: document.getElementById('forecastChart')
+    forecastChart: document.getElementById('forecastChart'),
+    timePanel: document.getElementById('timePanel'),
+    currencyPanel: document.getElementById('currencyPanel'),
+    wikiPanel: document.getElementById('wikiPanel'),
+    travelPanel: document.getElementById('travelPanel'),
+    centralCard: document.querySelector('.central-card')
 };
+
 
 let chartInstance = null;
 
@@ -22,9 +28,20 @@ export function showLoading(show = true, text = 'Loading…') {
 export function clearPanels() {
     dom.countryInfoDiv.innerHTML = '';
     dom.weatherInfoDiv.innerHTML = '';
+    dom.timePanel.innerHTML = '';
+    dom.currencyPanel.innerHTML = '';
+    dom.wikiPanel.innerHTML = '';
+    dom.travelPanel.innerHTML = '';
+    
     dom.resultPanels.classList.add('hidden');
     dom.hourlyPanel.classList.add('hidden');
     dom.chartPanel.classList.add('hidden');
+    dom.timePanel.classList.add('hidden');
+    dom.currencyPanel.classList.add('hidden');
+    dom.wikiPanel.classList.add('hidden');
+    dom.travelPanel.classList.add('hidden');
+    dom.centralCard.classList.remove('expanded');
+    
     dom.hourlyCarousel.innerHTML = '';
     if (chartInstance) {
         chartInstance.destroy();
@@ -223,5 +240,124 @@ export function renderExtendedForecast(forecastData, tempUnit) {
                 }
             }
         }
+    });
+}
+
+export function renderTime(weatherTimezoneOffset) {
+    dom.timePanel.classList.remove('hidden');
+    dom.timePanel.innerHTML = '';
+    
+    const title = document.createElement('h2');
+    title.innerHTML = '🕒 Local Time';
+    dom.timePanel.appendChild(title);
+
+    const timeDisplay = document.createElement('div');
+    timeDisplay.className = 'time-display';
+    timeDisplay.style.fontSize = '2.5rem';
+    timeDisplay.style.fontWeight = '800';
+    timeDisplay.style.textAlign = 'center';
+    timeDisplay.style.margin = 'auto 0';
+    dom.timePanel.appendChild(timeDisplay);
+    
+    const updateClock = () => {
+        const now = new Date();
+        const localTime = new Date(now.getTime() + weatherTimezoneOffset * 1000);
+        timeDisplay.textContent = localTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' });
+    };
+    
+    updateClock();
+    if(window.clockInterval) clearInterval(window.clockInterval);
+    window.clockInterval = setInterval(updateClock, 1000);
+}
+
+export function renderCurrency(country, rates) {
+    if (!country.currencies) return;
+    dom.currencyPanel.classList.remove('hidden');
+    dom.currencyPanel.innerHTML = '';
+
+    const title = document.createElement('h2');
+    title.innerHTML = '💱 Currency';
+    dom.currencyPanel.appendChild(title);
+
+    const currencyCode = Object.keys(country.currencies)[0];
+    const currencyInfo = country.currencies[currencyCode];
+    
+    const currName = document.createElement('div');
+    currName.innerHTML = `<strong>${currencyInfo.name}</strong> (${currencyInfo.symbol || currencyCode})`;
+    currName.style.fontSize = '1.2rem';
+    currName.style.marginBottom = '1rem';
+    currName.style.textAlign = 'center';
+    dom.currencyPanel.appendChild(currName);
+
+    if (rates && rates.rates) {
+        const rateToUSD = rates.rates[currencyCode];
+        if (rateToUSD && currencyCode !== 'USD') {
+            const val = document.createElement('div');
+            val.className = 'info-item';
+            val.innerHTML = `<span class="label">1 USD =</span><span class="value">${rateToUSD.toFixed(2)} ${currencyCode}</span>`;
+            dom.currencyPanel.appendChild(val);
+        }
+        const rateToEUR = rates.rates['EUR'] ? (rates.rates[currencyCode] / rates.rates['EUR']) : null;
+        if (rateToEUR && currencyCode !== 'EUR') {
+            const val = document.createElement('div');
+            val.className = 'info-item';
+            val.innerHTML = `<span class="label">1 EUR =</span><span class="value">${rateToEUR.toFixed(2)} ${currencyCode}</span>`;
+            dom.currencyPanel.appendChild(val);
+        }
+    }
+}
+
+export function renderWiki(summaryData) {
+    if (!summaryData || !summaryData.extract) return;
+    dom.wikiPanel.classList.remove('hidden');
+    dom.wikiPanel.innerHTML = '';
+
+    const title = document.createElement('h2');
+    title.innerHTML = '📚 Wikipedia';
+    dom.wikiPanel.appendChild(title);
+
+    const extract = document.createElement('p');
+    const sentences = summaryData.extract.match(/[^\.!\?]+[\.!\?]+/g) || [summaryData.extract];
+    extract.textContent = sentences.slice(0, 2).join(' ');
+    extract.style.lineHeight = '1.5';
+    extract.style.color = 'var(--text-color)';
+    dom.wikiPanel.appendChild(extract);
+
+    if (summaryData.content_urls?.desktop?.page) {
+        const link = document.createElement('a');
+        link.href = summaryData.content_urls.desktop.page;
+        link.target = '_blank';
+        link.textContent = 'Read more';
+        link.style.display = 'block';
+        link.style.marginTop = '1rem';
+        link.style.color = '#3b82f6';
+        link.style.textDecoration = 'none';
+        dom.wikiPanel.appendChild(link);
+    }
+}
+
+export function renderTravelFacts(country) {
+    dom.travelPanel.classList.remove('hidden');
+    dom.travelPanel.innerHTML = '';
+
+    const title = document.createElement('h2');
+    title.innerHTML = '✈️ Travel Facts';
+    dom.travelPanel.appendChild(title);
+
+    const drivingSide = country.car?.side ? country.car.side.charAt(0).toUpperCase() + country.car.side.slice(1) : 'Unknown';
+    const callingCode = country.idd?.root ? (country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] : '')) : 'Unknown';
+    const languages = country.languages ? Object.values(country.languages).join(', ') : 'Unknown';
+
+    const facts = [
+        ['🚗 Driving Side', drivingSide],
+        ['📞 Calling Code', callingCode],
+        ['🗣️ Languages', languages]
+    ];
+
+    facts.forEach(([label, value]) => {
+        const div = document.createElement('div');
+        div.className = 'info-item';
+        div.innerHTML = `<span class="label">${label}:</span><span class="value" style="max-width: 60%; text-align: right;">${value}</span>`;
+        dom.travelPanel.appendChild(div);
     });
 }

@@ -34,3 +34,15 @@ export async function fetchUvi(lat, lon) {
     if (!res.ok) throw new Error(`UVI fetch failed: ${res.status}`);
     return await res.json();
 }
+
+export async function fetchExchangeRates(base = 'USD') {
+    const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);
+    if (!res.ok) throw new Error(`Currency fetch failed: ${res.status}`);
+    return await res.json();
+}
+
+export async function fetchWikipediaSummary(query) {
+    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`);
+    if (!res.ok) throw new Error(`Wikipedia fetch failed: ${res.status}`);
+    return await res.json();
+}

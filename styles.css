@@ -137,14 +137,20 @@ body {
     border-radius: 28px;
     padding: 2.5rem;
     box-shadow: var(--glass-shadow);
-    width: fit-content;
-    min-width: min(100%, 500px);
+    width: 480px;
     max-width: 95vw;
     max-height: calc(100vh - 4rem);
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    transition: all 0.5s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.central-card.expanded {
+    width: 95vw;
+    max-width: 1400px;
 }
 
 header {
@@ -273,20 +279,33 @@ button:active {
 .result-area {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    min-height: 0;
     width: 100%;
 }
 
 .result-panels {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    grid-template-areas: 
+        "weather  country  time     currency"
+        "weather  country  travel   travel"
+        "weather  wiki     wiki     wiki"
+        "hourly   hourly   hourly   hourly"
+        "chart    chart    chart    chart";
+    grid-auto-rows: min-content;
+    align-content: start;
     gap: 1.5rem;
     width: 100%;
-    min-width: min(100%, 1100px);
-    flex: 1;
-    min-height: 0;
+    margin-top: 0.5rem;
 }
+
+#countryInfo   { grid-area: country; }
+#weatherInfo   { grid-area: weather; }
+#timePanel     { grid-area: time; }
+#currencyPanel { grid-area: currency; }
+#wikiPanel     { grid-area: wiki; }
+#travelPanel   { grid-area: travel; }
+#hourlyPanel   { grid-area: hourly; }
+#chartPanel    { grid-area: chart; }
 
 .hourly-carousel {
     display: flex;
@@ -340,9 +359,7 @@ body.dark .hourly-item {
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    height: 100%;
-    min-height: 0;
-    overflow-y: auto;
+    min-height: 180px;
 }
 
 .info-panel:hover {
@@ -396,11 +413,17 @@ body.dark .info-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
+    position: sticky;
+    bottom: -2.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    margin: 1.5rem -2.5rem -2.5rem -2.5rem;
+    padding: 1.5rem 2.5rem;
     border-top: 1px solid var(--glass-border);
     flex-wrap: wrap;
     gap: 1rem;
+    z-index: 20;
 }
 
 .switch-container {
@@ -470,12 +493,30 @@ body.dark #darkModeSwitch .slider {
 @media (max-width: 1200px) {
     .result-panels {
         grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: 
+            "weather  country"
+            "weather  time"
+            "weather  currency"
+            "travel   travel"
+            "wiki     wiki"
+            "hourly   hourly"
+            "chart    chart";
+        min-width: 100%;
     }
 }
 
 @media (max-width: 768px) {
     .result-panels {
         grid-template-columns: 1fr;
+        grid-template-areas: 
+            "weather"
+            "country"
+            "time"
+            "currency"
+            "travel"
+            "wiki"
+            "hourly"
+            "chart";
     }
     
     body {

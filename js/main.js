@@ -1,5 +1,5 @@
-import { fetchCountryByName, fetchWeatherForCity, reverseGeocode, fetchForecastForCity, fetchAirPollution, fetchUvi } from './api.js';
-import { dom, showLoading, clearPanels, renderCountryInfo, renderWeatherItems, renderExtendedForecast } from './ui.js';
+import { fetchCountryByName, fetchWeatherForCity, reverseGeocode, fetchForecastForCity, fetchAirPollution, fetchUvi, fetchExchangeRates, fetchWikipediaSummary } from './api.js';
+import { dom, showLoading, clearPanels, renderCountryInfo, renderWeatherItems, renderExtendedForecast, renderTime, renderCurrency, renderWiki, renderTravelFacts } from './ui.js';
 import { tempUnit, setAllWeatherData } from './settings.js';
 
 let lastCountry = null, lastCapital = null;
@@ -36,10 +36,14 @@ async function renderWeatherInfo(city) {
         
         const w = weather.weather?.[0] || {};
         renderWeatherItems(weather, w, tempUnit, aqiData, uviData);
+        if (weather.timezone !== undefined) {
+            renderTime(weather.timezone);
+        }
         if (forecastData) {
             renderExtendedForecast(forecastData, tempUnit);
         }
         dom.resultPanels.classList.remove('hidden');
+        dom.centralCard.classList.add('expanded');
     } catch (err) {
         dom.weatherInfoDiv.textContent = `Weather fetch error: ${err.message}`;
         console.error(err);
@@ -59,7 +63,30 @@ async function handleSearch(countryName) {
         lastCapital = country.capital?.[0] || null;
 
         renderCountryInfo(country);
-        if (lastCapital) await renderWeatherInfo(lastCapital);
+        renderTravelFacts(country);
+        dom.centralCard.classList.add('expanded');
+        
+        let ratesData = null;
+        let wikiData = null;
+        
+        try {
+            const currencyCode = Object.keys(country.currencies || {})[0];
+            const extraCountryData = await Promise.allSettled([
+                currencyCode ? fetchExchangeRates('USD') : Promise.resolve(null),
+                fetchWikipediaSummary(country.name.common)
+            ]);
+            if (extraCountryData[0].status === 'fulfilled') ratesData = extraCountryData[0].value;
+            if (extraCountryData[1].status === 'fulfilled') wikiData = extraCountryData[1].value;
+        } catch(e) {
+            console.warn("Failed to fetch extra country data", e);
+        }
+        
+        renderCurrency(country, ratesData);
+        renderWiki(wikiData);
+
+        if (lastCapital) {
+            await renderWeatherInfo(lastCapital);
+        }
     } catch (err) {
         dom.countryInfoDiv.textContent = `Error: ${err.message}`;
         dom.weatherInfoDiv.textContent = '';

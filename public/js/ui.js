@@ -151,10 +151,13 @@ export function renderWeatherItems(weather, w, tempUnit, aqiData, uviData) {
 
     if (w.icon) {
         const icon = document.createElement('img');
-        icon.src = `https://openweathermap.org/img/wn/${w.icon}@2x.png`;
+        icon.src = `https://cdn.jsdelivr.net/gh/basmilius/weather-icons/production/fill/openweathermap/${w.icon}.svg`;
         icon.alt = w.description;
-        icon.style.width = '80px';
+        icon.style.width = '100%';
+        icon.style.flex = '1';
+        icon.style.objectFit = 'contain';
         icon.style.marginTop = '1rem';
+        icon.style.minHeight = '120px';
         container.appendChild(icon);
     }
 }
@@ -178,7 +181,7 @@ export function renderExtendedForecast(forecastData, tempUnit) {
         div.className = 'hourly-item';
         div.innerHTML = `
             <span class="time">${time}</span>
-            <img src="https://openweathermap.org/img/wn/${icon}.png" alt="icon">
+            <img src="https://cdn.jsdelivr.net/gh/basmilius/weather-icons/production/fill/openweathermap/${icon}.svg" alt="icon">
             <span class="temp">${t}°</span>
         `;
         dom.hourlyCarousel.appendChild(div);
